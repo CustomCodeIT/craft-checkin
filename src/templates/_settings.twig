@@ -1,0 +1,13 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.autosuggestField({
+    first: true,
+    label: "API Key"|t('boefsupport'),
+    instructions: "A unique and long key that will allow access to your endpoints"|t('checkin'),
+    id: 'apiKey',
+    name: 'apiKey',
+    suggestEnvVars: true,
+    value: settings.apiKey,
+    errors: settings.getErrors('apiKey'),
+    required: true,
+}) }}

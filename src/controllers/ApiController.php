@@ -10,6 +10,8 @@ use craft\errors\InvalidPluginException;
 use craft\helpers\App;
 use craft\web\Controller;
 use craft\web\ServiceUnavailableHttpException;
+use customcodeit\checkin\CheckIn;
+use customcodeit\checkin\models\SettingsModel;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
@@ -32,13 +34,17 @@ class ApiController extends Controller
      */
     public function beforeAction($action): bool
     {
+        /** @var SettingsModel $settings */
+        $settings = CheckIn::$plugin->getSettings();
+
         if(!parent::beforeAction($action))
         {
             return false;
         }
 
         $submittedToken = Craft::$app->getRequest()->getParam('token', '');
-        $validToken = App::parseEnv('$CHECKIN_API_KEY');
+
+        $validToken = App::parseEnv($settings->apiKey);
 
         if(empty($submittedToken) || empty($validToken) || $submittedToken !== $validToken)
         {
